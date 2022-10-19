@@ -1,5 +1,6 @@
 package com.app.portfolio.controllers;
 
+import com.app.portfolio.exceptions.QuotesNotFoundException;
 import com.app.portfolio.model.Quotes;
 import com.app.portfolio.services.QuotesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,38 +32,14 @@ public class QuotesController {
         return service.getAll();
     }
 
-    @PostMapping("/quotes")
-    Quotes newEmployee(@RequestBody Quotes quotes) {
-        return service.save(quotes);
+    @PutMapping("/update")
+    void update() {
+        service.update();
     }
 
-    // Single item
-
-    @GetMapping("/quotes/{id}")
-    Quotes one(@PathVariable Long id) {
-
-//        return repository.findById(id)
-//                .orElseThrow(() -> new QuotesNotFoundException(id));
-        return null;
+    @GetMapping("/{symbol}")
+    Object one(@PathVariable String symbol) {
+        service.update();
+        return service.findBySymbol(symbol);
     }
-
-//    @PutMapping("/quotes/{id}")
-//    Quotes replaceEmployee(@RequestBody Quotes newQuotes, @PathVariable Long id) {
-//
-//        return service.findById(id)
-//                .map(quotes -> {
-//                    quotes.setSymbol(newQuotes.getSymbol());
-//                    quotes.setPrice(newQuotes.getPrice());
-//                    return service.save(quotes);
-//                })
-//                .orElseGet(() -> {
-//                    newQuotes.setId(id);
-//                    return service.save(newQuotes);
-//                });
-//    }
-//
-//    @DeleteMapping("/quotes/{id}")
-//    void deleteEmployee(@PathVariable Long id) {
-//        service.deleteById(id);
-//    }
 }
