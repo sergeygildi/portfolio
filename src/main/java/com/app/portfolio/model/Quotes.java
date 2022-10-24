@@ -1,15 +1,15 @@
 package com.app.portfolio.model;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.springframework.data.annotation.Id;
 
 @Data
-@Table(name = "quotes")
-@Entity
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class Quotes {
     @Id
-    @Column(name = "symbol")
     private String symbol;
-    @Column(name = "price")
     private String price;
 }

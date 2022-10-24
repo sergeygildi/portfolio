@@ -1,16 +1,18 @@
 package com.app.portfolio.controllers;
 
-import com.app.portfolio.exceptions.QuotesNotFoundException;
 import com.app.portfolio.model.Quotes;
 import com.app.portfolio.services.QuotesService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@Slf4j
 public class QuotesController {
 
     private final QuotesService service;
@@ -35,11 +37,27 @@ public class QuotesController {
     @PutMapping("/update")
     void update() {
         service.update();
+        log.info("All updated!");
+    }
+
+    @PutMapping("/add")
+    Optional<Quotes> add(
+            @RequestParam String symbol,
+            @RequestParam String price) {
+        service.add(symbol, price);
+        return service.findBySymbol(symbol);
     }
 
     @GetMapping("/{symbol}")
     Object one(@PathVariable String symbol) {
         service.update();
+        log.info("All updated!");
         return service.findBySymbol(symbol);
+    }
+
+    @DeleteMapping("/delete/all")
+    void deleteAll() {
+        service.deleteAll();
+        log.info("All delete!");
     }
 }
