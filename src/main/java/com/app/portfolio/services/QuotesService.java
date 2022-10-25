@@ -26,7 +26,7 @@ public class QuotesService {
         return (List<Quotes>) quotesRepo.findAll();
     }
 
-    public void add(String symbol, String price){
+    public void add(String symbol, String price) {
         quotesRepo.save(symbol, price);
     }
 
@@ -36,15 +36,12 @@ public class QuotesService {
         quotesRepo.saveAll(quotes);
     }
 
-    public Optional<Quotes> findBySymbol(String s) {
-        return quotesRepo.findById(s);
+    public Optional<List<Quotes>> findWhereSymbolLikeUserInput(String symbol) {
+        if (symbol.isEmpty() || symbol.isBlank()) {
+            log.debug("Empty String. Method: {}", this);
+            throw new RuntimeException();
+        }
+        return Optional.of(quotesRepo.findWhereSymbolLikeUserInput(symbol));
     }
 
-    public void deleteAll() {
-        quotesRepo.deleteAll();
-    }
 }
-
-
-
-

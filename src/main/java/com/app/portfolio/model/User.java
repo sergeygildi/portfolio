@@ -1,21 +1,30 @@
 package com.app.portfolio.model;
 
-import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.MappedCollection;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Entity
+@Getter
+@Setter
 @ToString
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Table(name = "users")
 public class User {
     @Id
-    private int id;
-    private String name;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private int usersId;
+    @Column(name = "user_name")
+    private String usersName;
+    @Column(name = "user_password")
+    private String userPassword;
 
-    @MappedCollection(idColumn = "user_id", keyColumn = "user_id")
-    private List<Portfolio> portfolioList;
+    @OneToMany(mappedBy = "user")
+    private List<Portfolio> portfolios;
+
 }

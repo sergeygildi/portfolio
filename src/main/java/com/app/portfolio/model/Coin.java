@@ -1,23 +1,30 @@
 package com.app.portfolio.model;
 
-import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.MappedCollection;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import java.util.List;
+import javax.persistence.*;
 
-@Data
+@Entity
+@Getter
+@Setter
 @ToString
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Table(name = "coins")
 public class Coin {
-
     @Id
-    private int id;
-    private String symbol;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "coin_id")
+    private int coinId;
+    @Column(name = "coin_symbol")
+    private String coinSymbol;
+    @Column(name = "coin_buy_price")
+    private String coinBuyPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-    @MappedCollection(idColumn = "coin_id", keyColumn = "coin_id")
-    private List<Coin> coinList;
 }

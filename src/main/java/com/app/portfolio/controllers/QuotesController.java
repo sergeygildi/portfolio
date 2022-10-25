@@ -37,7 +37,7 @@ public class QuotesController {
     @PutMapping("/update")
     void update() {
         service.update();
-        log.info("All updated!");
+        log.debug("All updated!");
     }
 
     @PutMapping("/add")
@@ -53,6 +53,11 @@ public class QuotesController {
         service.update();
         log.info("All updated!");
         return service.findBySymbol(symbol);
+    }
+
+    @GetMapping("/all/{symbol}")
+    Object allUsdt(@PathVariable String symbol) {
+        return service.findWhereSymbolLikeUserInput(symbol);
     }
 
     @DeleteMapping("/delete/all")
