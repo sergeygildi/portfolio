@@ -15,10 +15,17 @@ import java.util.List;
 public interface QuotesRepo extends CrudRepository<Quotes, String> {
 
     @Modifying
-    @Query(value = "INSERT INTO quotes(symbol, price) values (:symbol, :price)", nativeQuery = true)
+    @Query(value = "INSERT INTO Quotes (symbol, price) values (:symbol, :price)",
+            nativeQuery = true)
     void save(@Param("symbol") String symbol,
-              @Param("price") String price);
+              @Param("price") Double price);
 
     @Query(value = "from Quotes q where q.symbol like %:income%")
     List<Quotes> findWhereSymbolLikeUserInput(@Param("income") String symbol);
+
+//    @Query(value = "DROP VIEW quotes_view; CREATE VIEW quotes_view AS SELECT symbol, price FROM quotes WHERE price > '50'; SELECT * FROM quotes_view",
+//            nativeQuery = true)
+//    List<Quotes> view();
+
+
 }

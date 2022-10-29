@@ -1,5 +1,7 @@
 package com.app.portfolio.controllers;
 
+import com.app.portfolio.exceptions.EntityErrorResponse;
+import com.app.portfolio.exceptions.EntityNotFoundException;
 import com.app.portfolio.model.Quotes;
 import com.app.portfolio.services.QuotesService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
+@RequestMapping("/quotes")
 public class QuotesController {
 
     private final QuotesService service;
@@ -23,46 +26,33 @@ public class QuotesController {
     }
 
     @GetMapping(value = "/")
-    public ResponseEntity<List<Quotes>> read() {
-        List<Quotes> quotes = service.getAll();
-        return quotes != null && !quotes.isEmpty() ?
-                new ResponseEntity<>(quotes, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<List<Quotes>> getAll() {
+        Optional<List<Quotes>> quotes = service.getAll();
+        return quotes.isPresent() ?
+                new ResponseEntity(quotes, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/all")
-    List<Quotes> all() {
-        return service.getAll();
-    }
+//    @GetMapping(value = "/view")
+//    public ResponseEntity<List<Quotes>> view() {
+////        Optional<List<Quotes>> quotes = service.getView();
+////        return quotes.isPresent() ?
+////                new ResponseEntity(quotes, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        return ResponseEntity.of(service.getView());
+//    }
 
-    @PutMapping("/update")
+    @PatchMapping("/update")
     void update() {
         service.update();
-        log.debug("All updated!");
-    }
-
-    @PutMapping("/add")
-    Optional<Quotes> add(
-            @RequestParam String symbol,
-            @RequestParam String price) {
-        service.add(symbol, price);
-        return service.findBySymbol(symbol);
     }
 
     @GetMapping("/{symbol}")
-    Object one(@PathVariable String symbol) {
-        service.update();
-        log.info("All updated!");
-        return service.findBySymbol(symbol);
-    }
-
-    @GetMapping("/all/{symbol}")
-    Object allUsdt(@PathVariable String symbol) {
+    List<Quotes> allQuotesEqualsUserInput(@PathVariable String symbol) {
         return service.findWhereSymbolLikeUserInput(symbol);
     }
 
-    @DeleteMapping("/delete/all")
-    void deleteAll() {
-        service.deleteAll();
-        log.info("All delete!");
+    @ExceptionHandler({EntityNotFoundException.class})
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    private EntityErrorResponse handleException() {
+        return new EntityErrorResponse("Quote isn't found! Try to put a correct symbol");
     }
 }

@@ -3,7 +3,6 @@ package com.app.portfolio.model;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @Table(name = "users")
 public class User {
@@ -26,5 +24,13 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Portfolio> portfolios;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                ", usersName='" + usersName + '\'' +
+                ", portfolios=" + portfolios +
+                '}';
+    }
 
 }

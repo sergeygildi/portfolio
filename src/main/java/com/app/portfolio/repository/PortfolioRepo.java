@@ -16,4 +16,6 @@ public interface PortfolioRepo extends CrudRepository<Quotes, String> {
     @Query(value = "INSERT INTO portfolio(portfolio_name) values (:name)", nativeQuery = true)
     void save(@Param("name") String name);
 
+
+
 }
