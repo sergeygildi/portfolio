@@ -1,0 +1,43 @@
+version: '3.7'
+services:
+  portfolio-db:
+    container_name: portfolio-db
+    image: postgres:latest
+    networks:
+      - portfolio-network
+    environment:
+      - POSTGRES_DATABASE=portfolio
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_ROOT_PASSWORD=secret
+    volumes:
+      - dbvol:/var/lib/postgresql
+    ports:
+      - "3306:3306"
+    restart: always
+
+  portfolio-app:
+    build:
+      context: .
+    container_name: portfolio-app
+    image: portfolio:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - portfolio-network
+    depends_on:
+      - portfolio-db
+    environment:
+      - POSTGRES_HOST=portfolio
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=portfolio
+      - POSTGRES_PORT=3306
+
+networks:
+  portfolio-network:
+    name: portfolio-network
+
+volumes:
+  data:
+  dbvol:
