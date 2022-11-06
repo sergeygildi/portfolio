@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
+@ControllerAdvice
 @RequestMapping("/quotes")
 public class QuotesController {
 
@@ -32,14 +33,6 @@ public class QuotesController {
                 new ResponseEntity(quotes, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-//    @GetMapping(value = "/view")
-//    public ResponseEntity<List<Quotes>> view() {
-////        Optional<List<Quotes>> quotes = service.getView();
-////        return quotes.isPresent() ?
-////                new ResponseEntity(quotes, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        return ResponseEntity.of(service.getView());
-//    }
-
     @PatchMapping("/update")
     void update() {
         service.update();
@@ -52,7 +45,12 @@ public class QuotesController {
 
     @ExceptionHandler({EntityNotFoundException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    private EntityErrorResponse handleException() {
+    public EntityErrorResponse handleException() {
         return new EntityErrorResponse("Quote isn't found! Try to put a correct symbol");
+    }
+
+    @GetMapping(value = "/oups")
+    public String triggerException() {
+        throw new RuntimeException("Expected: controller used to showcase what happens when an exception is thrown");
     }
 }

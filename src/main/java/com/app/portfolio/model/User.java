@@ -19,6 +19,7 @@ public class User {
     private int usersId;
     @Column(name = "user_name")
     private String usersName;
+
     @Column(name = "user_password")
     private String userPassword;
 

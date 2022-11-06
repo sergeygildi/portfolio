@@ -28,6 +28,7 @@ public class QuotesService {
         this.actualQuotes = actualQuotes;
     }
 
+    @Transactional(readOnly = true)
     public void update() {
         Optional<List<Quotes>> quotes = actualQuotes.getActualQuoterList();
         log.info("Try to update quotes ...");
@@ -40,6 +41,7 @@ public class QuotesService {
         log.info("Quotes successfully updated.");
     }
 
+    @Transactional(readOnly = true)
     public Optional<List<Quotes>> getAll() {
         update();
 
@@ -60,6 +62,7 @@ public class QuotesService {
         return Optional.of(quotes);
     }
 
+    @Transactional(readOnly = true)
     public List<Quotes> findWhereSymbolLikeUserInput(String symbol) {
         update();
 
@@ -76,11 +79,5 @@ public class QuotesService {
             return quotes;
         }
     }
-
-//    public Optional<List<Quotes>> getView() {
-//        update();
-//        log.info("Return view. Service {}", this.getClass());
-//        return Optional.of(quotesRepo.view());
-//    }
 
 }

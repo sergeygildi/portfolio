@@ -3,7 +3,6 @@ package com.app.portfolio.model;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 public class Portfolio {
 
@@ -29,4 +27,11 @@ public class Portfolio {
     @OneToMany(mappedBy = "portfolio")
     private List<Coin> coins;
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "portfolioId = " + portfolioId + ", " +
+                "portfolioName = " + portfolioName + ", " +
+                "user = " + user + ")";
+    }
 }
