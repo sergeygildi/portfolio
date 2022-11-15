@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ public class UserService {
         log.info("Try to return all users from database ...");
 
         Optional<List<User>> result =
-                Optional.ofNullable(Optional.of(StreamSupport.stream(userRepo.findAll().spliterator(), false).collect(Collectors.toList()))
+                Optional.ofNullable(Optional.of(new ArrayList<>(userRepo.findAll()))
                         .orElseThrow(EntityNotFoundException::new));
 
         log.info("All users from the database were successfully returned.");

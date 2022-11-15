@@ -13,7 +13,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Table(name = "quotes")
 public class Quotes {
     @Id
@@ -21,6 +21,12 @@ public class Quotes {
     private String symbol;
     @Column(name = "price")
     private String price;
+
+    @Builder
+    public Quotes(String symbol, String price) {
+        this.symbol = symbol;
+        this.price = price;
+    }
 
     @Override
     public boolean equals(Object o) {

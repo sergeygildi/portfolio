@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
@@ -28,15 +28,12 @@ public class QuotesService {
         this.actualQuotes = actualQuotes;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void update() {
-        Optional<List<Quotes>> quotes = actualQuotes.getActualQuoterList();
+        Optional<Collection<Quotes>> quotes = Optional.of(actualQuotes.getActualQuoterList());
         log.info("Try to update quotes ...");
 
-        if (quotes.isEmpty()) {
-            log.error("Failed to get/update current quotes by Binance API");
-            throw new EntityNotFoundException();
-        } else quotes.ifPresent(quotesRepo::saveAll);
+        quotes.ifPresent(quotesRepo::saveAll);
 
         log.info("Quotes successfully updated.");
     }
@@ -48,9 +45,7 @@ public class QuotesService {
         log.info("Try to return all actual quotes from database ...");
 
         List<Quotes> quotes =
-                StreamSupport.stream(
-                                quotesRepo.findAll().spliterator(), false)
-                        .collect(Collectors.toList());
+                new ArrayList<>(quotesRepo.findAll());
 
         if (quotes.isEmpty()) {
             log.error("Failed to return all actual quotes from database.");

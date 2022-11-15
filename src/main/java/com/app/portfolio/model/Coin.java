@@ -1,9 +1,6 @@
 package com.app.portfolio.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,7 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Table(name = "coins")
 public class Coin {
     @Id
@@ -22,9 +19,15 @@ public class Coin {
     private String coinSymbol;
     @Column(name = "coin_buy_price")
     private String coinBuyPrice;
-
     @ManyToOne
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
+    @Builder
+    public Coin(int coinId, String coinSymbol, String coinBuyPrice, Portfolio portfolio) {
+        this.coinId = coinId;
+        this.coinSymbol = coinSymbol;
+        this.coinBuyPrice = coinBuyPrice;
+        this.portfolio = portfolio;
+    }
 }

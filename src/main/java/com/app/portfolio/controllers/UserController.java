@@ -2,9 +2,11 @@ package com.app.portfolio.controllers;
 
 import com.app.portfolio.exceptions.EntityErrorResponse;
 import com.app.portfolio.exceptions.EntityNotFoundException;
+import com.app.portfolio.model.Coin;
 import com.app.portfolio.model.Portfolio;
 import com.app.portfolio.model.Quotes;
 import com.app.portfolio.model.User;
+import com.app.portfolio.services.CoinService;
 import com.app.portfolio.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,10 +21,12 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final CoinService coinService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, CoinService coinService) {
         this.userService = userService;
+        this.coinService = coinService;
     }
 
     @GetMapping(value = "/")
@@ -47,9 +51,7 @@ public class UserController {
         userService.delete(id);
     }
 
-
     // PortfolioController
-
     @GetMapping(value = "/portfolio")
     public Optional<List<Portfolio>> usersWithPortfolio() {
         return userService.getAllPortfolios();
@@ -68,6 +70,27 @@ public class UserController {
     @GetMapping("/portfolio/{id}")
     Optional<Portfolio> portfolioPage(@PathVariable int id) {
         return userService.findPortfolioById(id);
+    }
+
+    // coin controllers
+    @GetMapping(value = "/coin")
+    public Optional<List<Coin>> showAllCoins() {
+        return coinService.getAllCoins();
+    }
+
+    @PutMapping("/coin/add")
+    public void add(@ModelAttribute Coin coin) {
+        coinService.add(coin);
+    }
+
+    @DeleteMapping("/coin/delete/{id}")
+    public void deleteCoin(@PathVariable int id) {
+        coinService.deleteCoin(id);
+    }
+
+    @GetMapping("/coin/{id}")
+    Optional<Coin> coinPage(@PathVariable int id) {
+        return coinService.findCoinById(id);
     }
 
     @ExceptionHandler({EntityNotFoundException.class})
